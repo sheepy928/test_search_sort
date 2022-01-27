@@ -113,6 +113,7 @@ def run_test2(num, cycle = 1000):
 
 def graphing(test1, test2):
     # plot the results
+    plt.figure(figsize=(10, 10))
     plt.subplot(1, 2, 1)
     plt.plot(size, test1["unsorted"], label = "linear search on unsorted list")
     plt.plot(size, test1["sorted"], label = "linear search on sorted list")
