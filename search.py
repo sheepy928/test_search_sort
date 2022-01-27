@@ -109,7 +109,7 @@ def run_test2(num, cycle = 50):
 
     return sum(time_linear), sum(time_binary)
 
-def graphing(test1, test2):
+def plot_result(test1, test2):
     # plot the results
     plt.figure(figsize=(10, 7))
     plt.subplot(1, 2, 1)
@@ -146,7 +146,7 @@ if __name__ == '__main__':
         test2["linear"].append(r3)
         test2["binary"].append(r4)
     
-    graphing(test1, test2)
+    plot_result(test1, test2)
     print(test1)
     print(test2)
 

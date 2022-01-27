@@ -77,14 +77,8 @@ def run_test(num, cycle = 10):
 
     return result
 
-
-if __name__ == '__main__':
-    size = [500, 1000, 1500, 2000, 2500, 3000]
-    results = []
-    for i in size:
-        results.append(run_test(i))
-
-    # plot the results
+# plot the result
+def plot_result(results):
     plt.figure(figsize=(10, 7))
     
     plt.title("Time Complexity of Sorting Algorithms")
@@ -110,5 +104,13 @@ if __name__ == '__main__':
 
     plt.suptitle("Time Usage of Sorting Algorithms")
     plt.show()
+
+if __name__ == '__main__':
+    size = [500, 1000, 1500, 2000, 2500, 3000]
+    results = []
+    for i in size:
+        results.append(run_test(i))
+
+    plot_result(results)
 
     
