@@ -12,23 +12,26 @@ def generate_list(size):
 # bubble sort
 def bubble_sort(l):
     n = len(l)
-
     for i in range(n):
         for j in range(0, n - i - 1):
             if l[j] > l[j + 1] :
                 l[j], l[j + 1] = l[j + 1], l[j]
 # insertion sort
-def insert_selection(l):
-    
-    # selection sort
-    return None
+def insertion_sort(l):
+    for i in range(1, len(l)):
+        key = l[i]
+        j = i - 1
+        while j >= 0 and key < l[j] :
+                l[j + 1] = l[j]
+                j -= 1
+        l[j + 1] = key
 
 # run the sort algorithms
 def sort(l, method):
     if method == 'bubble':
         return bubble_sort(l)
     elif method == 'insertion':
-        return insert_selection(l)
+        return insertion_sort(l)
     else:
         return None
 
@@ -41,8 +44,8 @@ def time_process(l, method):
 
 def run_test(num, cycle = 6):
     unsorted_list = generate_list(num) # average case
-    reverse_list = generate_list(num) # worst case
-    sorted_list = generate_list(num) # best case
+    reverse_list = sorted(unsorted_list, reverse=True) # worst case
+    sorted_list = sorted(unsorted_list) # best case
 
     result = {"reverse_bubble": [],
                 "reverse_insertion": [],
@@ -84,11 +87,11 @@ if __name__ == '__main__':
     plt.title("Time Complexity of Sorting Algorithms")
     plt.xlabel("Size of List")
     plt.ylabel("Time (s)")
-    plt.plot(size, results[0]["reverse_bubble"], label="reverse_bubble")
+    plt.plot(size, results[0]["reverse_bubble"], label="reverse_bubble") #
     plt.plot(size, results[0]["reverse_insertion"], label="reverse_insertion")
-    plt.plot(size, results[0]["sorted_bubble"], label="sorted_bubble")
+    plt.plot(size, results[0]["sorted_bubble"], label="sorted_bubble") #
     plt.plot(size, results[0]["sorted_insertion"], label="sorted_insertion")
-    plt.plot(size, results[0]["unsorted_bubble"], label="unsorted_bubble")
+    plt.plot(size, results[0]["unsorted_bubble"], label="unsorted_bubble") #
     plt.plot(size, results[0]["unsorted_insertion"], label="unsorted_insertion")
     plt.legend()
     plt.show()
