@@ -3,10 +3,10 @@ import time
 from matplotlib import pyplot as plt
 
 # generate a list of random integers
-def generate_list(size):
+def generate_list(size, max_num=1e6):
     l = []
-    for i in range(size):
-        l.append(random.randint(0, size))
+    for _ in range(size):
+        l.append(random.randint(0, max_num))
     return l
 
 # bubble sort
@@ -22,8 +22,8 @@ def insertion_sort(l):
         key = l[i]
         j = i - 1
         while j >= 0 and key < l[j] :
-                l[j + 1] = l[j]
-                j -= 1
+            l[j + 1] = l[j]
+            j -= 1
         l[j + 1] = key
 
 # run the sort algorithms
@@ -42,36 +42,38 @@ def time_process(l, method):
     end = time.perf_counter()
     return end - start
 
-def run_test(num, cycle = 6):
-    unsorted_list = generate_list(num) # average case
-    reverse_list = sorted(unsorted_list, reverse=True) # worst case
-    sorted_list = sorted(unsorted_list) # best case
+def run_test(num, cycle = 10):
+    
 
-    result = {"reverse_bubble": [],
-                "reverse_insertion": [],
-                "sorted_bubble": [],
-                "sorted_insertion": [],
-                "unsorted_bubble": [],
-                "unsorted_insertion": []}
+    result = {"reverse_bubble": 0,
+                "reverse_insertion": 0,
+                "sorted_bubble": 0,
+                "sorted_insertion": 0,
+                "unsorted_bubble": 0,
+                "unsorted_insertion": 0}
 
     for _ in range(cycle):
-        # test1: running bubble sort on a reversely sorted list
-        result["reverse_bubble"].append(time_process(reverse_list, 'bubble'))
+        unsorted_list = generate_list(num) # average case
+        reverse_list = sorted(unsorted_list, reverse=True) # worst case
+        sorted_list = sorted(unsorted_list) # best case
 
+
+        # test1: running bubble sort on a reversely sorted list
+        result["reverse_bubble"] += time_process(reverse_list, 'bubble')
         # test2: running insertion sort on a reversely sorted list
-        result["reverse_insertion"].append(time_process(reverse_list, 'insertion'))
+        result["reverse_insertion"] += time_process(reverse_list, 'insertion')
 
         # test3: running bubble sort on a sorted list
-        result["sorted_bubble"].append(time_process(sorted_list, 'bubble'))
+        result["sorted_bubble"] += time_process(sorted_list, 'bubble')
 
         # test4: running insertion sort on a sorted list
-        result["sorted_insertion"].append(time_process(sorted_list, 'insertion'))
+        result["sorted_insertion"] += time_process(sorted_list, 'insertion')
 
         # test5: running bubble sort on an unsorted list
-        result["unsorted_bubble"].append(time_process(unsorted_list, 'bubble'))
+        result["unsorted_bubble"] += time_process(unsorted_list, 'bubble')
 
         # test6: running insertion sort on an unsorted list
-        result["unsorted_insertion"].append(time_process(unsorted_list, 'insertion'))
+        result["unsorted_insertion"] += time_process(unsorted_list, 'insertion')
 
     return result
 
@@ -83,17 +85,30 @@ if __name__ == '__main__':
         results.append(run_test(i))
 
     # plot the results
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(10, 7))
+    
     plt.title("Time Complexity of Sorting Algorithms")
     plt.xlabel("Size of List")
     plt.ylabel("Time (s)")
-    plt.plot(size, results[0]["reverse_bubble"], label="reverse_bubble") #
-    plt.plot(size, results[0]["reverse_insertion"], label="reverse_insertion")
-    plt.plot(size, results[0]["sorted_bubble"], label="sorted_bubble") #
-    plt.plot(size, results[0]["sorted_insertion"], label="sorted_insertion")
-    plt.plot(size, results[0]["unsorted_bubble"], label="unsorted_bubble") #
-    plt.plot(size, results[0]["unsorted_insertion"], label="unsorted_insertion")
+    plt.subplot(1, 2, 1)
+    plt.plot(size, [x['reverse_bubble'] for x in results], label="reverse_bubble") #
+    plt.plot(size, [x['sorted_bubble'] for x in results], label="sorted_bubble") #
+    plt.plot(size, [x['unsorted_bubble'] for x in results], label="unsorted_bubble") #
+    plt.xlabel("Size of List")
+    plt.ylabel("Time (s)")
+    plt.title("Bubble Sort")
     plt.legend()
+
+    plt.subplot(1, 2, 2)
+    plt.plot(size, [x['reverse_insertion'] for x in results], label="reverse_insertion")
+    plt.plot(size, [x['sorted_insertion'] for x in results], label="sorted_insertion")
+    plt.plot(size, [x['unsorted_insertion'] for x in results], label="unsorted_insertion")
+    plt.xlabel("Size of List")
+    plt.ylabel("Time (s)")
+    plt.title("Insertion Sort")
+    plt.legend()
+
+    plt.suptitle("Time Usage of Sorting Algorithms")
     plt.show()
 
     

@@ -3,10 +3,10 @@ import time
 from matplotlib import pyplot as plt
 
 # generate a list of random integers
-def generate_list(size):
+def generate_list(size, max_num=1e6):
     l = []
-    for i in range(size):
-        l.append(random.randint(0, size))
+    for _ in range(size):
+        l.append(random.randint(0, max_num))
     return l
 
 # linear search
@@ -59,25 +59,24 @@ def choose_key(list):
     return list[random.randint(0, len(list) - 1)]
 
 # test1: running linear search on an unsorted and a sorted list
-def run_test1(num, cycle = 1000):
-    unsorted_list = generate_list(num)
-    sorted_list = sorted(unsorted_list)
-
+def run_test1(num, cycle = 50):
     print("Running linear search on an unsorted and a sorted list...")
     time_unsorted = []
     time_sorted = []
     for _ in range(cycle):
+        unsorted_list = generate_list(num)
+        sorted_list = sorted(unsorted_list)
         key = choose_key(unsorted_list)
 
-        start = time.time()
-        index = search(unsorted_list, key, 'linear')
-        end = time.time()
+        start = time.perf_counter()
+        search(unsorted_list, key, 'linear')
+        end = time.perf_counter()
         time_unsorted.append(end - start)
 
         # print("Running linear search on sorted_list1...")
-        start = time.time()
-        index = search(sorted_list, key, 'linear')
-        end = time.time()
+        start = time.perf_counter()
+        search(sorted_list, key, 'linear')
+        end = time.perf_counter()
         time_sorted.append(end - start)
 
     print("\tTotal time for linear search on unsorted_list: {}, size: {}, cycle: {}".format(sum(time_unsorted), num, cycle))
@@ -86,24 +85,23 @@ def run_test1(num, cycle = 1000):
     return sum(time_unsorted), sum(time_sorted)
 
 # test2: running linear and binary search on a sorted list
-def run_test2(num, cycle = 1000):
-    sorted_list = sorted(generate_list(num))
-
+def run_test2(num, cycle = 50):
     print("Running linear and binary search on a sorted list...")
     time_linear = []
     time_binary = []
     for _ in range(cycle):
+        sorted_list = sorted(generate_list(num))
         key = choose_key(sorted_list)
 
-        start = time.time()
-        index = search(sorted_list, key, 'linear')
-        end = time.time()
+        start = time.perf_counter()
+        search(sorted_list, key, 'linear')
+        end = time.perf_counter()
         time_linear.append(end - start)
 
         # print("Running binary search on sorted_list1...")
-        start = time.time()
-        index = search(sorted_list, key, 'binary')
-        end = time.time()
+        start = time.perf_counter()
+        search(sorted_list, key, 'binary')
+        end = time.perf_counter()
         time_binary.append(end - start)
 
     print("\tTotal time for linear search on sorted_list: {}, size: {}, cycle: {}".format(sum(time_linear), num, cycle))
@@ -113,24 +111,24 @@ def run_test2(num, cycle = 1000):
 
 def graphing(test1, test2):
     # plot the results
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(10, 7))
     plt.subplot(1, 2, 1)
     plt.plot(size, test1["unsorted"], label = "linear search on unsorted list")
     plt.plot(size, test1["sorted"], label = "linear search on sorted list")
-    plt.xlabel("size of list")
-    plt.ylabel("time (s)")
+    plt.xlabel("Size of list")
+    plt.ylabel("Time (s)")
     plt.legend()
     plt.title("linear search on unsorted and sorted list")
 
     plt.subplot(1, 2, 2)
     plt.plot(size, test2["linear"], label = "linear search on sorted list")
     plt.plot(size, test2["binary"], label = "binary search on sorted list")
-    plt.xlabel("size of list")
-    plt.ylabel("time (s)")
+    plt.xlabel("Size of list")
+    plt.ylabel("Time (s)")
     plt.legend()
     plt.title("linear and binary search on sorted list")
 
-    plt.suptitle("Linear and binary search on lists")
+    plt.suptitle("Linear and Binary Search on Sorted and Unsorted Lists")
     plt.show()
 
 # main
@@ -149,5 +147,6 @@ if __name__ == '__main__':
         test2["binary"].append(r4)
     
     graphing(test1, test2)
-
+    print(test1)
+    print(test2)
 
